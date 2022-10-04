@@ -653,4 +653,51 @@ class Flexible extends Field
     {
         return static::$model;
     }
+
+    /**
+     * Correctly removes a file inside of a flexible layout.
+     *
+     * @param Laravel\Nova\Http\Requests\NovaRequest $request
+     * @param                                        $model
+     * @param mixed                                  $field
+     *
+     * @return bool
+     */
+    public static function deleteFile(NovaRequest $request, $model, $field)
+    {
+        $path = explode('.', $field->group->originalField);
+        $path[] = 'attributes';
+        $path[] = $field->attribute;
+
+        $mainField = array_shift($path);
+        $data = $model->{$mainField};
+        if (is_string($data)) {
+            $data = json_decode($data, true);
+        }
+        Arr::set($data, implode('.', $path), '');
+
+        return [
+            $mainField => json_encode($data),
+        ];
+    }
+
+    /**
+     * Get the field layouts
+     *
+     * @return Collection
+     */
+    public function layouts()
+    {
+        return $this->layouts;
+    }
+
+    /**
+     * Get the field groups
+     *
+     * @return Collection
+     */
+    public function groups()
+    {
+        return $this->groups;
+    }
 }

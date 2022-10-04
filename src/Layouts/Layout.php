@@ -653,4 +653,14 @@ class Layout implements LayoutInterface, JsonSerializable, ArrayAccess, Arrayabl
     {
         return $this->attributesToArray();
     }
+
+    /**
+     * Retrieve the layout's fields as a collection.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function collectionFields()
+    {
+        return $this->fields;
+    }
 }
